@@ -1,0 +1,41 @@
+<div class="controls">
+    <button class="add-token"><i class="fas fa-user-plus"></i> Add</button>
+    <button class="set-friendly"><i class="fas fa-smile"></i> Friendly</button>
+    <button class="set-hostile"><i class="fas fa-angry"></i> Hostile</button>
+    <button class="clear"><i class=""></i> Hostile</button>
+</div>
+<div class="columns">
+    <div class="column friendly">
+        <h2>Friendly</h2>
+        {{#each combat.friendly as |token t|}}
+        <div class="combatants">
+            <img src="{{token.img}}"/>
+            <span>{{token.name}}</span>
+        </div>
+        {{/each}}
+    </div>
+    <div class="svg-container">
+        <svg viewBox= "0 0 184 754" preserveAspectRatio="none">
+            {{#each friendlyLines as |line l|}}
+                <line x1="0" y1="{{line.yFriendly}}" x2="175" y2="{{line.yHostile}}" stroke="green"/>
+            {{/each}}
+            {{#each hostileLines as |line l|}}
+                <line x1="0" y1="{{line.yFriendly}}" x2="175" y2="{{line.yHostile}}" stroke="red"/>
+            {{/each}}
+        </svg>
+    </div>
+    <div class="column hostile">
+        <h2>Hostile</h2>
+        {{#each combat.hostile as |token t|}}
+        <div class="combatants">
+            <img src="{{token.img}}"/>
+            <span>{{token.name}}</span>
+        </div>
+        {{/each}}
+    </div>
+</div>
+
+<div class="controls">
+    <button class="setup"><i></i> Setup</button>
+    <button class=""><i></i> Run</button>
+</div>

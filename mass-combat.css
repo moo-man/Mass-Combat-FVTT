@@ -1,0 +1,36 @@
+.mass-combat .controls {
+    height: 50px;
+    display: flex;
+    flex: unset;
+}
+
+.mass-combat .columns{
+    display:flex;
+    text-align: center;
+    justify-content: space-between;
+    overflow-y: scroll;
+}
+    
+.mass-combat .columns > .column {
+    padding:20px;
+    width:200px;
+}
+
+.mass-combat .columns img {
+    width: 50px;
+    height: 50px;
+}
+
+.mass-combat .columns .combatants {
+    display:flex;
+}
+
+
+.mass-combat .columns .svg-container {
+    flex: 1
+}
+
+.mass-combat .columns svg {
+    width: 100%;
+    height: 100%;
+}
