@@ -14,16 +14,6 @@
         </div>
         {{/each}}
     </div>
-    <div class="svg-container">
-        <svg viewBox= "0 0 184 754" preserveAspectRatio="none">
-            {{#each friendlyLines as |line l|}}
-                <line x1="0" y1="{{line.yFriendly}}" x2="175" y2="{{line.yHostile}}" stroke="green"/>
-            {{/each}}
-            {{#each hostileLines as |line l|}}
-                <line x1="0" y1="{{line.yFriendly}}" x2="175" y2="{{line.yHostile}}" stroke="red"/>
-            {{/each}}
-        </svg>
-    </div>
     <div class="column hostile">
         <h2>Hostile</h2>
         {{#each combat.hostile as |token t|}}

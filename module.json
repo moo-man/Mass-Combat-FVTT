@@ -4,11 +4,9 @@
   "description": "Adds a tool to easily manage combat between many NPCs",
   "version": "0.1",
   "author": "Moo Man",
-  "scripts": ["./combat-resolution/dnd5e.js"],
+  "scripts": [],
   "esmodules": ["mass-combat.js"],
-  "styles": [
-  "mass-combat.css"
-],
+  "styles": ["mass-combat.css"],
   "packs": [],
   "url": "",
   "minimumCoreVersion": "0.5.4",
