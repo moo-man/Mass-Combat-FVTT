@@ -8,17 +8,20 @@ export class MassCombatLayer extends CanvasLayer {
         super();
         this.arrows = {
             friendly: [],
-            hostile: []
+            hostile: [],
+            instances : []
         }
         this.gridSize = gridSize
     }
 
     drawArrows() {
+        console.log("mass-combat | Rendering Arrows")
+        this.clearArrows()
         this.arrows.friendly.forEach(arrow => {
-            this.addChild(new MassCombatArrow(arrow, {disposition : TOKEN_DISPOSITIONS.FRIENDLY}))
+            this.arrows.instances.push(this.addChild(new MassCombatArrow(arrow, {disposition : TOKEN_DISPOSITIONS.FRIENDLY})))
         })
         this.arrows.hostile.forEach(arrow => {
-            this.addChild(new MassCombatArrow(arrow, {disposition : TOKEN_DISPOSITIONS.HOSTILE}))
+            this.arrows.instances.push(this.addChild(new MassCombatArrow(arrow, {disposition : TOKEN_DISPOSITIONS.HOSTILE})))
         })
     }
 
@@ -34,19 +37,40 @@ export class MassCombatLayer extends CanvasLayer {
         }))
 
         targets.friendly.forEach(arrow => {
-            this.arrows.friendly.push(this._placeArrow(arrow))
+            this.arrows.friendly.push(this._findArrowPos(arrow))
         })
         targets.hostile.forEach(arrow => {
-            this.arrows.hostile.push(this._placeArrow(arrow))
-            //this.arrows.hostile.push({x : (arrow.start.x + arrow.end.x)/2 * this.gridSize, y : (arrow.start.y + arrow.end.y)/2 * this.gridSize})
+            this.arrows.hostile.push(this._findArrowPos(arrow))
         })
     }
 
-    _placeArrow(arrow)
+    _findArrowPos(arrow)
     {
         let rotation = Math.asin((arrow.start.y - arrow.end.y) / Math.sqrt((arrow.start.x - arrow.end.x)**2 + (arrow.start.y - arrow.end.y)**2))
-        let pos = {x : arrow.start.x * this.gridSize + this.gridSize/2, y : arrow.start.y * this.gridSize + this.gridSize/2, rotation : rotation}
+        if (arrow.start.x - arrow.end.x > 0)
+        {
+            if (arrow.start.y - arrow.end.y > 0)
+                rotation += (Math.PI/2)
+            else if (arrow.start.y - arrow.end.y < 0)
+                rotation -= (Math.PI/2)
+            else 
+                rotation += Math.PI
+        }    
+        let pos = {x : arrow.start.x * this.gridSize + this.gridSize/2, y : arrow.start.y * this.gridSize + this.gridSize/2, rotation : rotation} // Centered on the token if 0 rotation
+
+
+        // pos.x += (pos.rotation/(Math.PI) * this.gridSize/2)
+        // //pos.y += -(pos.rotation/(Math.PI) * this.gridSize)
+        // console.log (arrow.start.x, arrow.start.y, pos.rotation, Math.abs(pos.rotation/(Math.PI) * this.gridSize))
+        //pos.y += Math.abs(pos.rotation/(Math.PI) * this.gridSize/2)
+
+
         return pos
+    }
+
+    clearArrows() 
+    {
+        this.arrows.instances.forEach(i => i.destroy())
     }
 }
 
@@ -57,21 +81,26 @@ class MassCombatArrow extends PIXI.Container {
         this.target = pos;
         this.x = pos.x;
         this.y = pos.y;
-        this.rotation = pos.rotation * -1
         this.options = options;
         this.color = options.disposition == TOKEN_DISPOSITIONS.FRIENDLY ? "0x43DFDF": "0xE72124" 
-        this.draw();
+        this.draw(pos.rotation);
     }
 
-    draw() {
+    draw(rotation) {
         let grid = canvas.scene.data.grid;
         let arrow = PIXI.Sprite.from("modules/mass-combat/arrow.png")
+        arrow.anchor.set(0.5)
+        this.rotation = -1 * rotation;
         arrow.tint = this.color
         arrow.alpha = 0.5;
         arrow.width = grid/2;
         arrow.height = grid/2;
-        console.log(this.color);
         this.addChild(arrow)
+    }
+
+    destroy()
+    {
+        super.destroy(this)
     }
 }
 

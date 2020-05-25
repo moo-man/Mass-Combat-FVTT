@@ -20,6 +20,10 @@ Hooks.on("renderSidebarTab", (app, html) => {
     game.massCombatTool = new MassCombatTool();
 })
 
+Hooks.on("updateToken", () => {
+    game.massCombatTool.setup();
+})
+
 class MassCombatTool extends Application {
     static get defaultOptions()
     {
@@ -64,6 +68,8 @@ class MassCombatTool extends Application {
         }
         this.save();
         this.render(true);
+        canvas.layers.find(l => l.constructor.name == "MassCombatLayer").clearArrows();
+
     }
 
     getData()
